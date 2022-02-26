@@ -37,5 +37,11 @@ for product in webProducts:
     product_url = product_image_div.find(
         "a", class_="a-link-normal s-no-outline")
 
-    product = Product(product_title, '',
-                      f"{amazonLink}{product_url}", float(product_price))
+    product = Product(title=product_title.text, description='',
+                      image=f"{amazonLink}{product_image_url}", price=float(product_price))
+    products.append(product)
+
+for prod in products:
+    print(prod.title)
+    print(prod.price)
+    print('------------------------------------------------')
