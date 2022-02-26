@@ -1,5 +1,5 @@
 // account page
 
-class Account extends StatelessWidget {
-    
-}
+import 'package:flutter/material.dart';
+
+// class Account extends StatelessWidget {}
