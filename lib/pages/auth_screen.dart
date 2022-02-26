@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/pages/home.dart';
@@ -84,6 +85,7 @@ class _AuthCardState extends State<AuthCard>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.Login;
+  String _selectedSignupCategory = 'Receiver';
   Map<String, String> _authData = {
     'email': '',
     'password': '',
@@ -159,8 +161,13 @@ class _AuthCardState extends State<AuthCard>
         await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: _authData['email']!, password: _authData['password']!);
       } else {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _authData['email']!, password: _authData['password']!);
+        UserCredential user = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _authData['email']!, password: _authData['password']!);
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.user!.uid)
+            .set({'Role': _selectedSignupCategory});
       }
       Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
@@ -182,7 +189,7 @@ class _AuthCardState extends State<AuthCard>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeIn,
-        height: _authMode == AuthMode.Signup ? 320 : 260,
+        height: _authMode == AuthMode.Signup ? 340 : 240,
         constraints:
             BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
         width: deviceSize.width * 0.75,
@@ -192,6 +199,34 @@ class _AuthCardState extends State<AuthCard>
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  constraints: BoxConstraints(
+                      minHeight: _authMode == AuthMode.Signup ? 60 : 0,
+                      maxHeight: _authMode == AuthMode.Signup ? 120 : 0),
+                  curve: Curves.easeIn,
+                  child: FadeTransition(
+                    opacity: _opacityAnimation,
+                    child: SlideTransition(
+                      position: _slideAnimation,
+                      child: DropdownButton(
+                          isExpanded: true,
+                          value: _selectedSignupCategory,
+                          items: <String>['Merchant', 'Volunteer', 'Receiver']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedSignupCategory = newValue!;
+                            });
+                          }),
+                    ),
+                  ),
+                ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
