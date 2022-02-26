@@ -1,32 +1,41 @@
 from bs4 import BeautifulSoup
 import requests
 
-amazonLink = "https://www.amazon.com.au/s?k="
-query = "flower"
-page = requests.get(f"{amazonLink}{query}")
+from product import Product
+
+amazonLink = "https://www.amazon.com.au"
+amazonQueryPrefix = "s?k="
+query = "car"
+page = requests.get(f"{amazonLink}/{amazonQueryPrefix}{query}")
+# print(f"{amazonLink}/{amazonQueryPrefix}{query}")
 soup = BeautifulSoup(page.content, 'html.parser')
+# print(soup)
+webProducts = soup.find_all("div", class_="s-result-item")
+products = []
 
-
-products = soup.find_all("div", class_="s-result-item")
-
-for product in products:
+for product in webProducts:
+    # Product Title
     product_title = product.find(
         "span", class_="a-size-base-plus a-color-base a-text-normal")
     if product_title == None:
         continue
     # print(product_title.text)
 
+    # Product Price
     product_price_dollar = product.find("span", class_="a-price-whole")
     product_price_cent = product.find("span", class_="a-price-fraction")
     if product_price_dollar == None or product_price_cent == None:
         continue
 
     product_price = f"{product_price_dollar.text}{product_price_cent.text}"
-    # print(product_price)
 
+    # Product Image
     product_image_div = product.find("div", class_="s-product-image-container")
     product_image_url = product_image_div.find("img", class_="s-image")
-    print(product_image_url['src'])
 
+    # Product image
+    product_url = product_image_div.find(
+        "a", class_="a-link-normal s-no-outline")
 
-# print(products[0])
+    product = Product(product_title, '',
+                      f"{amazonLink}{product_url}", float(product_price))
