@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/pages/auth_screen.dart';
 import 'package:food_app/pages/home.dart';
+import 'package:food_app/widgets/navbar.dart';
+import 'package:food_app/widgets/base.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
