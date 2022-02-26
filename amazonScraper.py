@@ -7,10 +7,9 @@ from product import Product
 def getProducts(query):
     amazonLink = "https://www.amazon.com.au"
     amazonQueryPrefix = "s?k="
+
     page = requests.get(f"{amazonLink}/{amazonQueryPrefix}{query}")
-    # print(f"{amazonLink}/{amazonQueryPrefix}{query}")
     soup = BeautifulSoup(page.content, 'html.parser')
-    # print(soup)
     webProducts = soup.find_all("div", class_="s-result-item")
     products = []
 
