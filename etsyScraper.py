@@ -18,11 +18,8 @@ def getProducts(query):
     print(len(webProducts))
     for product in webProducts:
         title_h3 = product.find('h3', class_="v2-listing-card__title")
-        if(title_h3 == None):
-            continue
         print(title_h3.text.strip())
-
-    # print(webProducts)
+        pricingDiv = product.find('div', class_="n-listing-card__price")
 
     products = []
 
