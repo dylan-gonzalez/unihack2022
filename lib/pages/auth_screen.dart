@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/pages/home.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -40,8 +41,7 @@ class AuthScreen extends StatelessWidget {
                       margin: EdgeInsets.only(bottom: 20.0),
                       padding:
                           EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
-                      transform: Matrix4.rotationZ(0)
-                        ..translate(-10.0),
+                      transform: Matrix4.rotationZ(0)..translate(-10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Color.fromRGBO(229, 227, 201, 1.0),
@@ -162,8 +162,9 @@ class _AuthCardState extends State<AuthCard>
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: _authData['email']!, password: _authData['password']!);
       }
+      Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      _showErrorDialog(e.message ?? 'Authentication failed');
     }
     setState(() {
       _isLoading = false;

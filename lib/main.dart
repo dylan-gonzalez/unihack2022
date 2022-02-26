@@ -5,7 +5,14 @@ import 'package:food_app/pages/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: "AIzaSyCfRNOy_znlike-dDUl1wL4NFEBkyptwNk", // Your apiKey
+      appId: "1:665745974993:android:e44c4ef638602b823b87f0", // Your appId
+      messagingSenderId: "665745974993", // Your messagingSenderId
+      projectId: "food-app-ef0cd", // Your projectId
+    ),
+  );
   runApp(MyApp());
 }
 
@@ -21,6 +28,7 @@ class MyApp extends StatelessWidget {
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
+        HomeScreen.routeName: (_) => HomeScreen(),
         AuthScreen.routeName: (_) => AuthScreen(),
       },
     );
