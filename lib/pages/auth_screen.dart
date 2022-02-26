@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/pages/home.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -153,6 +154,8 @@ class _AuthCardState extends State<AuthCard>
   }
 
   Future<void> _submit() async {
+    Navigator.of(context).pushNamed(HomeScreen.routeName);
+
     if (!_formKey.currentState!.validate()) {
       // Invalid!
       return;
