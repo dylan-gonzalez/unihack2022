@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 enum AuthMode { Signup, Login }
@@ -151,6 +152,31 @@ class _AuthCardState extends State<AuthCard>
     }
   }
 
+  Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) {
+      // Invalid!
+      return;
+    }
+    _formKey.currentState!.save();
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      if (_authMode == AuthMode.Login) {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: _authData['email']!, password: _authData['password']!);
+      } else {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: _authData['email']!, password: _authData['password']!);
+      }
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -235,7 +261,7 @@ class _AuthCardState extends State<AuthCard>
                   ElevatedButton(
                     child:
                         Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
-                    onPressed: () {},
+                    onPressed: _submit,
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
