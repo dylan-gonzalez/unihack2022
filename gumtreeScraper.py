@@ -10,11 +10,13 @@ page = requests.get(f"{amazonLink}{query}{linkend}")
 soup = BeautifulSoup(page.content, 'html.parser')
 
 
-products = soup.find_all("div", class_="user-ad-row-new-design__salary-detail")
+products = soup.find_all("a", class_="user-ad-row-new-design")
+
 
 for product in products:
     product_title = product.find(
         "span", class_="user-ad-row-new-design__title-span")
+
     if product_title == None:
         continue
     print(product_title.text)
