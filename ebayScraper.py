@@ -15,14 +15,22 @@ soup = BeautifulSoup(page.content, 'html.parser')
 
 products = []
 
-# li_el = soup.find_all('li', {'data-view': "mi:1686|"})
 for tag in soup.find_all(id = "srp-river-results"):
-    ul = tag.find('ul', class_ = "srp-results").find_all("li", class_="s-item")
+    products_array = tag.find('ul', class_ = "srp-results").find_all("li", class_="s-item")
+    
+    for p in products_array:
+        image = p.find('img', class_="s-item__image-img")['src']
+        info = p.find('div', class_="s-item__info")
+        title = info.find("h3").text
+        price = float(info.find("span", class_="s-item__price").text.strip("AU $").replace(",", ""))
 
-    title = ul[0].find('div', class_="s-item__info").find("a", class_="s-item__link").find('h3')
+        product = Product(title, price, image)
 
-    print(title)
+        products.append(product)
 
 
-# print(srp_results)
-print("-----------------------------------------------------") 
+for p in products:  
+    print(p.title)
+    print(p.price)
+    print(p.image)
+    print("------------------")
