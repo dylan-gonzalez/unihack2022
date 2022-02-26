@@ -1,4 +1,3 @@
-from ssl import Options
 from bs4 import BeautifulSoup
 from product import Product
 from selenium import webdriver
@@ -66,6 +65,7 @@ def getProducts(query):
                        product_image_url, product_link_url)
 
         products.append(prod)
+    return products
 
 
 getProducts('ring')
