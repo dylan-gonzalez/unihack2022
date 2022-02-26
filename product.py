@@ -9,3 +9,4 @@ class Product:
         self.url = url
         self.image = image
         self.price = price
+        self.source = source

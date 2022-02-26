@@ -1,13 +1,17 @@
 from bs4 import BeautifulSoup
 import requests
 from product import Product
+import math
 
 
 class ScraperAPI(object):
-
     def __init__(self, query: str):
-        self.MAX_LIMIT = 25
-        
+        self.MAX_LIMIT = 75
+        self.amazonLink = "https://www.amazon.com.au/s?k="
+        self.amazonPagePrefix = "&page="
+        self.ebayLink = "ebay.com.au/sch/i.html?_nkw="
+        self.ebayPagePrefix = "&_pgn="
+
         query = query.replace(' ', '+')
         self.query = query
 
@@ -21,59 +25,73 @@ class ScraperAPI(object):
         return self.products
 
     def getAmazonProducts(self):
-        amazonLink = "https://www.amazon.com.au"
-        amazonQueryPrefix = "s?k="
-        page = requests.get(f"{amazonLink}/{amazonQueryPrefix}{self.query}")
-        # print(f"{amazonLink}/{amazonQueryPrefix}{query}")
-        soup = BeautifulSoup(page.content, 'html.parser')
-        # print(soup)
-        webProducts = soup.find_all("div", class_="s-result-item")
+        counter = 1
+        source = "AMAZON"
+
         products = []
 
-        for product in webProducts:
-            # Product Title
-            product_title = product.find(
-                "span", class_="a-size-base-plus a-color-base a-text-normal")
-            if product_title == None:
-                continue
+        while counter < self.MAX_LIMIT:
+            print("AMAZON: NEW PAGE")
+            page = requests.get(f"{self.amazonLink}{self.query}{self.amazonPagePrefix}{math.ceil(counter / self.MAX_LIMIT)}")
+            soup = BeautifulSoup(page.content, 'html.parser')
 
-            # Product Price
-            product_price_dollar = product.find("span", class_="a-price-whole")
-            product_price_cent = product.find("span", class_="a-price-fraction")
-            if product_price_dollar == None or product_price_cent == None:
-                continue
+            webProducts = soup.find_all("div", class_="s-result-item")
 
-            product_price = f"{product_price_dollar.text}{product_price_cent.text}"
+            for product in webProducts:
+                print("amazon counter: ", counter)
+                # Product Title
+                product_title = product.find(
+                    "span", class_="a-size-base-plus a-color-base a-text-normal")
 
-            # Product Image
-            product_image_div = product.find(
-                "div", class_="s-product-image-container")
-            product_image_url = product_image_div.find("img", class_="s-image")
+                # Product Price
+                product_price_dollar = product.find("span", class_="a-price-whole")
+                product_price_cent = product.find("span", class_="a-price-fraction")
 
-            # Product image
-            product_url = product_image_div.find(
-                "a", class_="a-link-normal s-no-outline")
+                if product_title == None or product_price_dollar == None or product_price_cent == None:
+                    continue
 
-            product = Product(title=product_title.text, url=f"{amazonLink}{product_url['href']}",
-                            image=product_image_url['src'], price=float(product_price))
-            products.append(product)
+                try:
+                    product_price = float(f"{product_price_dollar.text}{product_price_cent.text}")
+                except:
+                    continue
 
-        return products
+                # Product Image
+                product_image_div = product.find(
+                    "div", class_="s-product-image-container")
+                product_image_url = product_image_div.find("img", class_="s-image")
+
+                # Product image
+                product_url = product_image_div.find(
+                    "a", class_="a-link-normal s-no-outline")
+
+                product = Product(title=product_title.text, url=f"{self.amazonLink}{product_url['href']}",source=source,
+                                image=product_image_url['src'], price=product_price,)
+                products.append(product)
+
+                counter += 1
+
+            print("products len: ", len(products))
+            return products
+
 
     def getEbayProducts(self):
-        ebay = "ebay.com.au/sch/i.html?_nkw="
-
-        # for site, url in websites.items():
-        page = requests.get(f"https://{ebay}{self.query}&")
-        soup = BeautifulSoup(page.content, 'html.parser')
-
+        counter = 1
         products = []
+        source = "EBAY"
 
-        for tag in soup.find_all(id="srp-river-results"):
-            products_array = tag.find(
-                'ul', class_="srp-results").find_all("li", class_="s-item")
+        while counter < self.MAX_LIMIT:
+            print("EBAY: NEW PAGE")
+            page = requests.get(f"https://{self.ebayLink}{self.query}{self.ebayPagePrefix}{math.ceil(counter / self.MAX_LIMIT)}")
+            soup = BeautifulSoup(page.content, 'html.parser').find(id="srp-river-results")
+            productsArray = soup.find(
+                    'ul', class_="srp-results").find_all("li", class_="s-item")
 
-            for p in products_array:
+            # for tag in soup.find_all(id="srp-river-results"):
+                # products_array = tag.find(
+                #     'ul', class_="srp-results").find_all("li", class_="s-item")
+
+            for p in productsArray:      
+                print(counter)                  
                 image = p.find('img', class_="s-item__image-img")['src']
                 info = p.find('div', class_="s-item__info")
                 title = info.find("h3").text
@@ -85,9 +103,12 @@ class ScraperAPI(object):
                 except:
                     continue
 
-                product = Product(title, price, image, url)
+                product = Product(title, price, source, image, url)
 
                 products.append(product)
+
+                counter += 1
+                
 
         # for p in products:
         #     print(p.title)
@@ -96,7 +117,9 @@ class ScraperAPI(object):
         #     print(p.url)
         #     print("----------")
 
+
         return products
+
 
     def analyseProducts(self):
         # Analyse products
@@ -129,7 +152,7 @@ class ScraperAPI(object):
 query = input('Query: ')
 scraper = ScraperAPI(query)
 products = scraper.getProducts()
-for p in products:
-    print (p.title)
-    print (p.price)
-    print("--------------------")
+# for p in products:
+#     print (p.title)
+#     print (p.price)
+#     print("--------------------")
