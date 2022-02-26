@@ -20,7 +20,6 @@ def getProducts(query):
             "span", class_="a-size-base-plus a-color-base a-text-normal")
         if product_title == None:
             continue
-        # print(product_title.text)
 
         # Product Price
         product_price_dollar = product.find("span", class_="a-price-whole")
@@ -39,7 +38,7 @@ def getProducts(query):
         product_url = product_image_div.find(
             "a", class_="a-link-normal s-no-outline")
 
-        product = Product(title=product_title.text, url=product_url['href'],
-                          image=f"{amazonLink}{product_image_url}", price=float(product_price))
+        product = Product(title=product_title.text, url=f"{amazonLink}{product_url['href']}",
+                          image=product_image_url['src'], price=float(product_price))
         products.append(product)
     return products
