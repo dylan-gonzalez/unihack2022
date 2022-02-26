@@ -2,8 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 from product import Product
 
-# websites = {"ebay": "ebay.com.au/sch/i.html?_nkw=", "amazon": "amazon.com.au/s?k="}
-
 ebay ="ebay.com.au/sch/i.html?_nkw=" 
 
 # query = input("Enter item: ")
@@ -22,9 +20,10 @@ for tag in soup.find_all(id = "srp-river-results"):
         image = p.find('img', class_="s-item__image-img")['src']
         info = p.find('div', class_="s-item__info")
         title = info.find("h3").text
+        url = info.find("a", class_="s-item__link")['href']
         price = float(info.find("span", class_="s-item__price").text.strip("AU $").replace(",", ""))
 
-        product = Product(title, price, image)
+        product = Product(title, price, image, url)
 
         products.append(product)
 
@@ -33,4 +32,5 @@ for p in products:
     print(p.title)
     print(p.price)
     print(p.image)
+    print(p.url)
     print("------------------")
