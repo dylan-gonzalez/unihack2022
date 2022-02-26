@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.food_app">
+    package="com.ctrlaltdefeat.food_app">
    <application
         android:label="food_app"
         android:name="${applicationName}"
@@ -44,7 +44,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <meta-data
-            android:name="com.unihack.android.geo.AIzaSyBkSKaUd231pTPFzdEJTJXQ2mmW5RqGAcg"
+            android:name="com.ctrlaltdefeat.food_app.android.geo.AIzaSyBkSKaUd231pTPFzdEJTJXQ2mmW5RqGAcg"
             android:value="AIzaSyBkSKaUd231pTPFzdEJTJXQ2mmW5RqGAcg" />
     </application>
 </manifest>

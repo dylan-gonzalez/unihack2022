@@ -4,6 +4,7 @@ import 'package:food_app/pages/auth_screen.dart';
 import 'package:food_app/pages/home.dart';
 import 'package:food_app/widgets/navbar.dart';
 import 'package:food_app/widgets/base.dart';
+import 'package:food_app/pages/map.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      // home: HomeScreen(),
+      home: Map(),
       debugShowCheckedModeBanner: false,
       routes: {
         HomeScreen.routeName: (_) => HomeScreen(),

@@ -45,8 +45,8 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.food_app"
-        minSdkVersion flutter.minSdkVersion
+        applicationId "com.ctrlaltdefeat.food_app"
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
