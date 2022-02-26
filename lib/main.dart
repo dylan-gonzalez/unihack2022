@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
       routes: {
         HomeScreen.routeName: (_) => HomeScreen(),
         AuthScreen.routeName: (_) => AuthScreen(),
+        Map.routeName: (_) => Map(),
       },
     );
   }

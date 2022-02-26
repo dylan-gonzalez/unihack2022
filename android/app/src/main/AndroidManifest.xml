@@ -44,7 +44,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <meta-data
-            android:name="com.ctrlaltdefeat.food_app.android.geo.AIzaSyBkSKaUd231pTPFzdEJTJXQ2mmW5RqGAcg"
+            android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBkSKaUd231pTPFzdEJTJXQ2mmW5RqGAcg" />
     </application>
 </manifest>
