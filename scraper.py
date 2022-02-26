@@ -3,10 +3,9 @@ import requests
 from product import Product
 import math
 
-
 class ScraperAPI(object):
     def __init__(self, query: str):
-        self.MAX_LIMIT = 75
+        self.MAX_LIMIT = 100
         self.amazonLink = "https://www.amazon.com.au/s?k="
         self.amazonPagePrefix = "&page="
         self.ebayLink = "ebay.com.au/sch/i.html?_nkw="
@@ -47,12 +46,14 @@ class ScraperAPI(object):
                 product_price_dollar = product.find("span", class_="a-price-whole")
                 product_price_cent = product.find("span", class_="a-price-fraction")
 
-                if product_title == None or product_price_dollar == None or product_price_cent == None:
-                    continue
-
                 try:
                     product_price = float(f"{product_price_dollar.text}{product_price_cent.text}")
                 except:
+                    counter += 1
+                    continue
+
+                if product_title == None or product_price_dollar == None or product_price_cent == None:
+                    counter += 1
                     continue
 
                 # Product Image
@@ -86,10 +87,6 @@ class ScraperAPI(object):
             productsArray = soup.find(
                     'ul', class_="srp-results").find_all("li", class_="s-item")
 
-            # for tag in soup.find_all(id="srp-river-results"):
-                # products_array = tag.find(
-                #     'ul', class_="srp-results").find_all("li", class_="s-item")
-
             for p in productsArray:      
                 print(counter)                  
                 image = p.find('img', class_="s-item__image-img")['src']
@@ -101,6 +98,7 @@ class ScraperAPI(object):
                     price = float(
                         info.find("span", class_="s-item__price").text.strip("AU $").replace(",", ""))
                 except:
+                    counter += 1
                     continue
 
                 product = Product(title, price, source, image, url)
@@ -108,15 +106,6 @@ class ScraperAPI(object):
                 products.append(product)
 
                 counter += 1
-                
-
-        # for p in products:
-        #     print(p.title)
-        #     print(p.price)
-        #     print(p.image)
-        #     print(p.url)
-        #     print("----------")
-
 
         return products
 
