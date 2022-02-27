@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/navigation/navigation_routes.dart';
 import 'package:food_app/navigation/navigation_screen.dart';
 import 'package:food_app/pages/auth_screen.dart';
 import 'package:food_app/pages/home.dart';
+import 'package:food_app/pages/search.dart';
 import 'package:food_app/widgets/navbar.dart';
 import 'package:food_app/widgets/base.dart';
 import 'package:food_app/pages/map.dart';
@@ -32,9 +34,10 @@ class MyApp extends StatelessWidget {
       home: NavigationScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
-        HomeScreen.routeName: (_) => HomeScreen(),
-        AuthScreen.routeName: (_) => AuthScreen(),
-        Map.routeName: (_) => Map(),
+        NavigationRoutes.homeRoute: (_) => HomeScreen(),
+        NavigationRoutes.authRoute: (_) => AuthScreen(),
+        NavigationRoutes.mapRoute: (_) => Map(),
+        NavigationRoutes.searchRoute: (_) => SearchScreen(),
       },
     );
   }
