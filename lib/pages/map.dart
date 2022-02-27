@@ -8,15 +8,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-    static const routeName = '/auth';
+  static const routeName = '/map';
 
-    @override
-    Widget build(BuildContext context) {
-      return MaterialApp(
-        title: 'Flutter Google Maps Demo',
-        home: MapSample(),
-      );
-    }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Google Maps Demo',
+      home: MapSample(),
+    );
+  }
 }
 
 class MapSample extends StatefulWidget {
