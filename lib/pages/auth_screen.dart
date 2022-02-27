@@ -39,7 +39,6 @@ class AuthScreen extends StatelessWidget {
                     margin: EdgeInsets.only(bottom: 20.0),
                     padding:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
-                    transform: Matrix4.rotationZ(0)..translate(-10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: Color.fromRGBO(229, 227, 201, 1.0),
@@ -84,6 +83,7 @@ class _AuthCardState extends State<AuthCard>
   String _selectedSignupCategory = 'Receiver';
   Map<String, String> _authData = {
     'email': '',
+    'name': '',
     'password': '',
   };
   var _isLoading = false;
@@ -236,6 +236,19 @@ class _AuthCardState extends State<AuthCard>
                   },
                 ),
                 TextFormField(
+                  decoration: InputDecoration(labelText: 'Name'),
+                  keyboardType: TextInputType.name,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Invalid name!';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _authData['name'] = value!;
+                  },
+                ),
+                TextFormField(
                   decoration: InputDecoration(labelText: 'Password'),
                   obscureText: true,
                   controller: _passwordController,
@@ -275,6 +288,19 @@ class _AuthCardState extends State<AuthCard>
                       ),
                     ),
                   ),
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Phone'),
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Invalid phone!';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _authData['name'] = value!;
+                  },
                 ),
                 SizedBox(
                   height: 20,
