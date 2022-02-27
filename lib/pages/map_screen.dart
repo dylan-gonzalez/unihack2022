@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:food_app/helpers/firebase_helper.dart';
 
-
-//center:-37.8136, 144.9631 
-
+//center:-37.8136, 144.9631
 
 
 
@@ -49,6 +47,7 @@ class MapSampleState extends State<MapSample> {
   }
 
   void _onMapCreated(GoogleMapController controller) async {
+    //await FirebaseHelper.generateRandomUsers();
     var merchantOffers = await FirebaseHelper.getMerchantOffers();
     var receiverAsks = await FirebaseHelper.getReceiverOffers();
 
