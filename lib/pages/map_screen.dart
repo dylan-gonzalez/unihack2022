@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:food_app/helpers/firebase_helper.dart';
 
 class MapScreen extends StatelessWidget {
   @override
@@ -26,34 +27,30 @@ class MapSampleState extends State<MapSample> {
   Set<Marker> _markers = {};
 
   void _onMapCreated(GoogleMapController controller) async {
-    var merchantOffers = await getMerchantOffers();
+    var merchantOffers = await FirebaseHelper.getMerchantOffers();
     for (var offer in merchantOffers.docs) {
-      print(offer.data()['location']);
+      print("HERE: " + (offer.data()['location'] as GeoPoint).latitude.toString());
     }
 
-    setState(() {
-      _markers.add(Marker(
+    Set<Marker> markers = {};
+    for (var merchantOffer in merchantOffers.docs) {
+        var offer = merchantOffer.data();
+        var merchant = await FirebaseHelper.getUser(offer['userID']);
+
+        GeoPoint loc =offer['location']; 
+        markers.add(Marker(
           markerId: MarkerId('id-1'),
-          position: LatLng(37.42796133580664, -122.085749655962),
-          infoWindow: InfoWindow(title: 'Test', snippet: "another test")));
+          position: LatLng(loc.latitude, loc.longitude),
+          infoWindow: InfoWindow(title: merchant['name'], snippet: "another test")));
+
+    }
+    setState(() {
+    _markers.addAll(markers);
     });
+
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getMerchantOffers() {
-    return FirebaseFirestore.instance
-        .collection('offers')
-        .where('completed', isEqualTo: false)
-        .where('taken', isEqualTo: false)
-        .get();
-  }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getReceiverOffers() {
-    return FirebaseFirestore.instance
-        .collection('asks')
-        .where('completed', isEqualTo: false)
-        .where('taken', isEqualTo: false)
-        .get();
-  }
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -68,7 +65,7 @@ class MapSampleState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
-    getMerchantOffers().then((value) {
+    FirebaseHelper.getMerchantOffers().then((value) {
       print(value);
     });
 
