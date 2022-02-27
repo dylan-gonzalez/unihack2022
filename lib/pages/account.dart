@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-// class Account extends StatelessWidget {
+class AuthScreen extends StatelessWidget {
+    static const routeName = '/account';
 
-// }
+}
