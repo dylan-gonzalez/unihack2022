@@ -5,9 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
+class Map extends StatelessWidget {
   static const routeName = '/map';
 
   @override
@@ -50,7 +48,7 @@ class MapSampleState extends State<MapSample> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToTheLake,
-        label: Text('To the lake!'),
+        label: Text('hey you'),
         icon: Icon(Icons.directions_boat),
       ),
     );
