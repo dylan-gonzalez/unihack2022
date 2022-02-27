@@ -33,25 +33,26 @@ class MapSampleState extends State<MapSample> {
   void _onMapCreated(GoogleMapController controller) async {
     var merchantOffers = await FirebaseHelper.getMerchantOffers();
     for (var offer in merchantOffers.docs) {
-      print("HERE: " + (offer.data()['location'] as GeoPoint).latitude.toString());
+      print(
+          '----------------------------------------------------------------------' +
+              (offer.data()['location'] as GeoPoint).latitude.toString());
     }
 
     Set<Marker> markers = {};
     for (var merchantOffer in merchantOffers.docs) {
-        var offer = merchantOffer.data();
-        var merchant = await FirebaseHelper.getUser(offer['userID']);
+      var offer = merchantOffer.data();
+      var merchant = await FirebaseHelper.getUser(offer['userID']);
 
-        GeoPoint loc =offer['location']; 
-        markers.add(Marker(
+      GeoPoint loc = offer['location'];
+      markers.add(Marker(
           markerId: MarkerId('id-1'),
           position: LatLng(loc.latitude, loc.longitude),
-          infoWindow: InfoWindow(title: merchant['name'], snippet: "another test")));
-
+          infoWindow:
+              InfoWindow(title: merchant['name'], snippet: "another test")));
     }
     setState(() {
-    _markers.addAll(markers);
+      _markers.addAll(markers);
     });
-
   }
 
 
