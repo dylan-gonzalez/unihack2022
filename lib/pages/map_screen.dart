@@ -28,7 +28,9 @@ class MapSampleState extends State<MapSample> {
   void _onMapCreated(GoogleMapController controller) async {
     var merchantOffers = await getMerchantOffers();
     for (var offer in merchantOffers.docs) {
-      print(offer.data()['location']);
+      print(
+          '----------------------------------------------------------------------' +
+              (offer.data()['location'] as GeoPoint).latitude.toString());
     }
 
     setState(() {
@@ -44,6 +46,7 @@ class MapSampleState extends State<MapSample> {
         .collection('offers')
         .where('completed', isEqualTo: false)
         .where('taken', isEqualTo: false)
+        .limit(1)
         .get();
   }
 
