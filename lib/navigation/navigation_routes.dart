@@ -1,4 +1,6 @@
 class NavigationRoutes {
-  static const String home = '/';
-  static const String auth = '/auth';
+  static const String homeRoute = '/';
+  static const String authRoute = '/auth';
+  static const String mapRoute = '/map';
+  static const String searchRoute = '/search';
 }
