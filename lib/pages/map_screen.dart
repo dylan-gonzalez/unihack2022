@@ -1,6 +1,7 @@
 // map page for volunteers
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -46,11 +47,11 @@ class MapSampleState extends State<MapSample> {
 
     Marker _createMarker(String role, var OfferOrAsk, var user) {
       GeoPoint loc = OfferOrAsk['location'];
-
+      var rand = Random();
       return Marker(
-        markerId: MarkerId('id-1'),
+        markerId: MarkerId(rand.nextDouble().toString()),
         position: LatLng(loc.latitude, loc.longitude),
-        icon: role == "Merchant" ? redMarker : blueMarker,
+        //icon: role == "Merchant" ? redMarker : blueMarker,
         infoWindow: InfoWindow(
             title: user['Name'],
             snippet: "Qty: " + OfferOrAsk['qty'].toString()),
