@@ -1,6 +1,7 @@
 // map page for volunteers
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import 'package:food_app/helpers/firebase_helper.dart';
 
 
 //center:-37.8136, 144.9631 
+
+
 
 
 class MapScreen extends StatelessWidget {
@@ -26,36 +29,41 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
+  Random rnd = Random();
+
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = {};
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+  late BitmapDescriptor redMarker, blueMarker;
 
-  void showMarkerPopup() {
-
+  @override
+  void initState() {
+    super.initState();
+    setCustomMarkers();
   }
 
 
+  void setCustomMarkers() async {
+    redMarker = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), 'lib/assets/red_marker.png');
+    blueMarker = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), 'lib/assets/blue_marker.png');
+  }
 
   void _onMapCreated(GoogleMapController controller) async {
     var merchantOffers = await FirebaseHelper.getMerchantOffers();
     var receiverAsks = await FirebaseHelper.getReceiverOffers();
 
-    var redMarker = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), 'lib/assets/red_marker.png');
-    var blueMarker = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), 'lib/assets/blue_marker.png');
 
     Marker _createMarker(String role, var OfferOrAsk, var user) {
+    
       GeoPoint loc = OfferOrAsk['location'];
+      print("LATITUDE: " + loc.latitude.toString());
 
       return Marker(
-          markerId: MarkerId('id-1'),
+          markerId: MarkerId(rnd.nextDouble().toString()),
           position: LatLng(loc.latitude, loc.longitude),
           icon: role == "Merchant" ? redMarker : blueMarker,
           infoWindow:
-              InfoWindow(title: user['name'], snippet: "Qty: " + OfferOrAsk['qty'].toString()),
+              InfoWindow(title: user['Name'], snippet: "Qty: " + OfferOrAsk['qty'].toString()),
           // onTap: 
               
               );
@@ -64,8 +72,10 @@ class MapSampleState extends State<MapSample> {
     Set<Marker> markers = {};
 
     for (var merchantOffer in merchantOffers.docs) {
+      print("MARKER");
       var offer = merchantOffer.data();
-      var user = await FirebaseHelper.getUser(offer['userID']);
+      var user = await FirebaseHelper.getUser(offer['userId']);
+      print("USER");
 
       Marker marker = _createMarker("Merchant", offer, user);
       markers.add(marker);
@@ -73,7 +83,7 @@ class MapSampleState extends State<MapSample> {
 
     for (var ask in receiverAsks.docs) {
       var offer = ask.data();
-      var user = await FirebaseHelper.getUser(offer['userID']);
+      var user = await FirebaseHelper.getUser(offer['userId']);
 
       // GeoPoint loc = offer['location'];
       markers.add(_createMarker("Receiver", offer, user));
@@ -84,9 +94,9 @@ class MapSampleState extends State<MapSample> {
     });
   }
 
-  static final CameraPosition _MelbourneCBD = CameraPosition(
-    target: LatLng(-37.8136, 144.9631),
-    zoom: 14,
+  static final CameraPosition startPosition = CameraPosition(
+    target: LatLng(-36.3821, 145.4072),
+    zoom: 11,
   );
 
   @override
@@ -98,7 +108,7 @@ class MapSampleState extends State<MapSample> {
     return new Scaffold(
       body: GoogleMap(
         mapType: MapType.hybrid,
-        initialCameraPosition: _MelbourneCBD,
+        initialCameraPosition: startPosition,
         markers: _markers,
         onMapCreated: _onMapCreated,
       ),
