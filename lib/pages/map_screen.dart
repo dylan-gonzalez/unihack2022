@@ -25,11 +25,17 @@ class MapSampleState extends State<MapSample> {
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = {};
 
-  void _onMapCreated(GoogleMapController controller) {
+  void _onMapCreated(GoogleMapController controller) async {
+    var merchantOffers = await getMerchantOffers();
+    for (var offer in merchantOffers.docs) {
+      print(offer.data()['location']);
+    }
+
     setState(() {
-      _markers.add(
-        Marker(markerId: MarkerId('id-1'), position: LatLng(37.42796133580664, -122.085749655962), infoWindow: InfoWindow(title: 'Test', snippet: "another test")) 
-      );
+      _markers.add(Marker(
+          markerId: MarkerId('id-1'),
+          position: LatLng(37.42796133580664, -122.085749655962),
+          infoWindow: InfoWindow(title: 'Test', snippet: "another test")));
     });
   }
 
