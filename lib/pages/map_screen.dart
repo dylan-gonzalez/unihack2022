@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:food_app/helpers/firebase_helper.dart';
 
-
-//center:-37.8136, 144.9631 
-
+//center:-37.8136, 144.9631
 
 class MapScreen extends StatelessWidget {
   @override
@@ -30,6 +28,7 @@ class MapSampleState extends State<MapSample> {
   Set<Marker> _markers = {};
 
   void _onMapCreated(GoogleMapController controller) async {
+    //await FirebaseHelper.generateRandomUsers();
     var merchantOffers = await FirebaseHelper.getMerchantOffers();
     for (var offer in merchantOffers.docs) {
       print(
@@ -40,7 +39,7 @@ class MapSampleState extends State<MapSample> {
     Set<Marker> markers = {};
     for (var merchantOffer in merchantOffers.docs) {
       var offer = merchantOffer.data();
-      var merchant = await FirebaseHelper.getUser(offer['userID']);
+      var merchant = await FirebaseHelper.getUser(offer['userId']);
 
       GeoPoint loc = offer['location'];
       markers.add(Marker(
@@ -53,8 +52,6 @@ class MapSampleState extends State<MapSample> {
       _markers.addAll(markers);
     });
   }
-
-
 
   static final CameraPosition _MelbourneCBD = CameraPosition(
     target: LatLng(-37.8136, 144.9631),

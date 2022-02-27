@@ -235,18 +235,31 @@ class _AuthCardState extends State<AuthCard>
                     _authData['email'] = value!;
                   },
                 ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Name'),
-                  keyboardType: TextInputType.name,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Invalid name!';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _authData['name'] = value!;
-                  },
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  constraints: BoxConstraints(
+                      minHeight: _authMode == AuthMode.Signup ? 60 : 0,
+                      maxHeight: _authMode == AuthMode.Signup ? 120 : 0),
+                  curve: Curves.easeIn,
+                  child: FadeTransition(
+                    opacity: _opacityAnimation,
+                    child: SlideTransition(
+                      position: _slideAnimation,
+                      child: TextFormField(
+                        decoration: InputDecoration(labelText: 'Name'),
+                        keyboardType: TextInputType.name,
+                        validator: (value) {
+                          // if (value!.isEmpty) {
+                          //   return 'Invalid name!';
+                          // }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData['name'] = value!;
+                        },
+                      ),
+                    ),
+                  ),
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Password'),
@@ -289,18 +302,31 @@ class _AuthCardState extends State<AuthCard>
                     ),
                   ),
                 ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Phone'),
-                  keyboardType: TextInputType.phone,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Invalid phone!';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _authData['name'] = value!;
-                  },
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  constraints: BoxConstraints(
+                      minHeight: _authMode == AuthMode.Signup ? 60 : 0,
+                      maxHeight: _authMode == AuthMode.Signup ? 120 : 0),
+                  curve: Curves.easeIn,
+                  child: FadeTransition(
+                    opacity: _opacityAnimation,
+                    child: SlideTransition(
+                      position: _slideAnimation,
+                      child: TextFormField(
+                        decoration: InputDecoration(labelText: 'Phone'),
+                        keyboardType: TextInputType.phone,
+                        validator: (value) {
+                          // if (value!.isEmpty) {
+                          //   return 'Invalid phone!';
+                          // }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData['name'] = value!;
+                        },
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 20,

@@ -39,20 +39,52 @@ class FirebaseHelper {
     return FirebaseFirestore.instance.collection('routes').get();
   }
 
-  static generateRandomUsers() async {
-    List<String> roles = ['MERCHANT', 'VOLUNTEER', 'RECEIVER'];
+  // static generateRandomUsers() async {
+  //   List<String> roles = ['MERCHANT', 'VOLUNTEER', 'RECEIVER'];
+  //   int j = 0;
+  //   for (var i = 0; i < RandomData.data.length; i++) {
+  //     var row = RandomData.data[i];
+  //     UserCredential user = await FirebaseAuth.instance
+  //         .createUserWithEmailAndPassword(
+  //             email: row["email"]!, password: getRandomString(9));
 
-    for (var i = 0; i < RandomData.data.length; i++) {
-      var row = RandomData.data[i];
-      UserCredential user = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: row["email"]!, password: getRandomString(5));
+  //     FirebaseFirestore.instance.collection('users').doc(user.user!.uid).set({
+  //       'Role': roles[i % 3],
+  //       'Name': row['name'],
+  //       'Contact': row['phone'],
+  //     });
+  //     var rnd = Random();
+  //     switch (i % 3) {
+  //       case 0:
+  //         FirebaseFirestore.instance.collection('offers').add({
+  //           'completed': false,
+  //           'location':
+  //               GeoPoint(RandomData.lngltd[j], RandomData.lngltd[j + 1]),
+  //           'photo': 'https://picsum.photos/200/300',
+  //           'qty': rnd.nextInt(500),
+  //           'taken': false,
+  //           'time': DateTime.now(),
+  //           'userId': user.user!.uid,
+  //         });
+  //         j = j + 2;
+  //         break;
+  //       case 2:
+  //         FirebaseFirestore.instance.collection('asks').add({
+  //           'completed': false,
+  //           'location':
+  //               GeoPoint(RandomData.lngltd[j], RandomData.lngltd[j + 1]),
+  //           'qty': rnd.nextInt(500),
+  //           'taken': false,
+  //           'userId': user.user!.uid,
+  //         });
+  //         j = j + 2;
+  //         break;
+  //       default:
+  //     }
 
-      FirebaseFirestore.instance.collection('users').doc(user.user!.uid).set(
-          {'Role': roles[i % 3], 'Name': row['name'], 'Contact': row['phone']});
-      i++;
-    }
-  }
+  //     i++;
+  //   }
+  // }
 
   static String getRandomString(int length) =>
       String.fromCharCodes(Iterable.generate(
