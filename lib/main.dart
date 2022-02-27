@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/navigation/navigation_routes.dart';
@@ -5,6 +6,7 @@ import 'package:food_app/navigation/navigation_screen.dart';
 import 'package:food_app/pages/auth_screen.dart';
 import 'package:food_app/pages/home.dart';
 import 'package:food_app/pages/search.dart';
+import 'package:food_app/pages/splash_screen.dart';
 import 'package:food_app/widgets/navbar.dart';
 import 'package:food_app/widgets/base.dart';
 import 'package:food_app/pages/map_screen.dart';
@@ -31,8 +33,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: NavigationScreen(),
       debugShowCheckedModeBanner: false,
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SplashScreen();
+          }
+          if (snapshot.hasData) {
+            return NavigationScreen();
+          }
+          return AuthScreen();
+        },
+      ),
       routes: {
         NavigationRoutes.authRoute: (_) => AuthScreen(),
       },

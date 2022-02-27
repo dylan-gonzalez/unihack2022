@@ -165,7 +165,6 @@ class _AuthCardState extends State<AuthCard>
             .doc(user.user!.uid)
             .set({'Role': _selectedSignupCategory});
       }
-      Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
       _showErrorDialog(e.message ?? 'Authentication failed');
     }
