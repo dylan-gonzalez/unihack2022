@@ -2,7 +2,11 @@
 
 import 'package:flutter/material.dart';
 
-class AuthScreen extends StatelessWidget {
-    static const routeName = '/account';
+class AccountScreen extends StatelessWidget {
+  const AccountScreen({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }

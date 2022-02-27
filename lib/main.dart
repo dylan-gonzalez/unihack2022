@@ -7,7 +7,7 @@ import 'package:food_app/pages/home.dart';
 import 'package:food_app/pages/search.dart';
 import 'package:food_app/widgets/navbar.dart';
 import 'package:food_app/widgets/base.dart';
-import 'package:food_app/pages/map.dart';
+import 'package:food_app/pages/map_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,10 +34,7 @@ class MyApp extends StatelessWidget {
       home: NavigationScreen(),
       debugShowCheckedModeBanner: false,
       routes: {
-        NavigationRoutes.homeRoute: (_) => HomeScreen(),
         NavigationRoutes.authRoute: (_) => AuthScreen(),
-        NavigationRoutes.mapRoute: (_) => Map(),
-        NavigationRoutes.searchRoute: (_) => SearchScreen(),
       },
     );
   }

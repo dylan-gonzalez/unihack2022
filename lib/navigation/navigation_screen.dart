@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:food_app/navigation/navigation_routes.dart';
 import 'package:food_app/pages/auth_screen.dart';
 import 'package:food_app/pages/home.dart';
+import 'package:food_app/pages/map_screen.dart';
+import 'package:food_app/pages/search.dart';
 
 class NavigationScreen extends StatefulWidget {
   @override
@@ -11,7 +13,6 @@ class NavigationScreen extends StatefulWidget {
 
 class _NavigationScreenState extends State<NavigationScreen> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
-
   int currentIndex = 0;
 
   List<BottomNavigationBarItem> bottomNavigationTabSetup() {
@@ -47,7 +48,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         navigatorKey.currentState!.pushNamed(NavigationRoutes.mapRoute);
         break;
       case 2:
-        navigatorKey.currentState!.pushNamed(NavigationRoutes.authRoute);
+        navigatorKey.currentState!.pushNamed(NavigationRoutes.searchRoute);
         break;
       case 3:
         FirebaseAuth.instance.signOut();
@@ -58,6 +59,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<BottomNavigationBarItem> tabItems = bottomNavigationTabSetup();
     return Scaffold(
       body: Navigator(
         key: navigatorKey,
@@ -68,8 +70,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
             case NavigationRoutes.homeRoute:
               page = HomeScreen();
               break;
-            case NavigationRoutes.homeRoute:
-              page = AuthScreen();
+            case NavigationRoutes.mapRoute:
+              page = MapScreen();
+              break;
+            case NavigationRoutes.searchRoute:
+              page = SearchScreen();
               break;
             default:
               throw Exception('Unknown route: ${routeSettings.name}');
@@ -83,8 +88,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        fixedColor: Colors.orange,
         currentIndex: currentIndex,
-        items: bottomNavigationTabSetup(),
+        items: tabItems,
         onTap: onNavigationBarTap,
       ),
     );
