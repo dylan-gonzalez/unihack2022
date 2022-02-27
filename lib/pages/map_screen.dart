@@ -27,27 +27,55 @@ class MapSampleState extends State<MapSample> {
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = {};
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
+
+  void showMarkerPopup() {}
+
   void _onMapCreated(GoogleMapController controller) async {
     //await FirebaseHelper.generateRandomUsers();
     var merchantOffers = await FirebaseHelper.getMerchantOffers();
-    for (var offer in merchantOffers.docs) {
-      print(
-          '----------------------------------------------------------------------' +
-              (offer.data()['location'] as GeoPoint).latitude.toString());
+    var receiverAsks = await FirebaseHelper.getReceiverOffers();
+
+    var redMarker = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'lib/assets/red_marker.png');
+    var blueMarker = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'lib/assets/blue_marker.png');
+
+    Marker _createMarker(String role, var OfferOrAsk, var user) {
+      GeoPoint loc = OfferOrAsk['location'];
+
+      return Marker(
+        markerId: MarkerId('id-1'),
+        position: LatLng(loc.latitude, loc.longitude),
+        icon: role == "Merchant" ? redMarker : blueMarker,
+        infoWindow: InfoWindow(
+            title: user['Name'],
+            snippet: "Qty: " + OfferOrAsk['qty'].toString()),
+        // onTap:
+      );
     }
 
     Set<Marker> markers = {};
+
     for (var merchantOffer in merchantOffers.docs) {
       var offer = merchantOffer.data();
-      var merchant = await FirebaseHelper.getUser(offer['userId']);
+      var user = await FirebaseHelper.getUser(offer['userId']);
 
-      GeoPoint loc = offer['location'];
-      markers.add(Marker(
-          markerId: MarkerId('id-1'),
-          position: LatLng(loc.latitude, loc.longitude),
-          infoWindow:
-              InfoWindow(title: merchant['name'], snippet: "another test")));
+      Marker marker = _createMarker("Merchant", offer, user);
+      markers.add(marker);
     }
+
+    for (var ask in receiverAsks.docs) {
+      var offer = ask.data();
+      var user = await FirebaseHelper.getUser(offer['userId']);
+
+      // GeoPoint loc = offer['location'];
+      markers.add(_createMarker("Receiver", offer, user));
+    }
+
     setState(() {
       _markers.addAll(markers);
     });
@@ -57,12 +85,6 @@ class MapSampleState extends State<MapSample> {
     target: LatLng(-37.8136, 144.9631),
     zoom: 14,
   );
-
-  // static final CameraPosition _kLake = CameraPosition(
-  //     bearing: 192.8334901395799,
-  //     target: LatLng(37.43296265331129, -122.08832357078792),
-  //     tilt: 59.440717697143555,
-  //     zoom: 19.151926040649414);
 
   @override
   Widget build(BuildContext context) {
