@@ -1,0 +1,4 @@
+Web scraping app made with Django
+
+Activate venv: .\venv\bin\activate 
+run django server: python manage.py runserver
